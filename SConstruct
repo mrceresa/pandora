@@ -7,11 +7,11 @@ from distutils.version import LooseVersion
 vars = Variables('custom.py')
 vars.Add(BoolVariable('debug', 'compile with debug flags', 'no'))
 vars.Add(BoolVariable('edebug', 'compile with extreme debug logs', 'no'))
-vars.Add(BoolVariable('python2', 'use Python2.7 instead of Python3', 'no'))
-vars.Add('installDir', 'directory where to install Pandora', '/usr/local/pandora')
+vars.Add(BoolVariable('python2', 'use Python2.7 instead of Python3', 'yes'))
+vars.Add('installDir', 'directory where to install Pandora', '/home/mario/local/pandora')
 
 if platform.system()=='Linux':
-    vars.Add(PathVariable('hdf5', 'Path where HDF5 library was installed', '/usr/local/hdf5', PathVariable.PathIsDir))
+    vars.Add(PathVariable('hdf5', 'Path where HDF5 library was installed', '/usr/', PathVariable.PathIsDir))
 
 env = Environment(variables=vars, ENV=os.environ, CXX='mpicxx')
 if env['debug'] == False:
@@ -58,6 +58,7 @@ if platform.system()=='Linux':
     env.Append(CPPPATH = [env['hdf5']+'/include', '/usr/include/gdal/'])
     env.Append(CPPPATH = [env['hdf5']+'/include'])
     env.Append(LIBPATH = [env['hdf5']+'/lib'])
+    env.Append(LIBPATH = [env['hdf5']+'/lib64'])
 elif platform.system()=='Darwin':
     env.Append(LIBPATH = '/usr/local/lib')
 
@@ -98,7 +99,8 @@ envPython = conf.Finish()
 
 # versioned lib do not create correct links with .so in osx
 if platform.system()=='Linux':
-    sharedPyLib = envPython.SharedLibrary('lib/'+pythonLibraryName,  srcPyFiles, SHLIBVERSION=version)
+    print pythonLibraryName,  srcPyFiles, version
+    sharedPyLib = envPython.SharedLibrary('lib64/'+pythonLibraryName,  srcPyFiles, SHLIBVERSION=version)
     sharedLib = env.SharedLibrary('lib/'+libraryName, srcBaseFiles, SHLIBVERSION=version)
 elif platform.system()=='Darwin':
     sharedPyLib = envPython.SharedLibrary('lib/'+pythonLibraryName,  srcPyFiles)
@@ -138,4 +140,6 @@ Default(sharedLib)
 Default(sharedPyLib)
 env.Alias('cassandra', cassandraCompilation)
 env.Alias('install', [cassandraCompilation, sharedLib, sharedPyLib, installedLib, installedPyLib, installedHeaders, installedAnalysisHeaders, installBin, installShare, installMpiStub])
+
+
 
