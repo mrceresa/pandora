@@ -42,6 +42,8 @@ utils/MpiStubCode.os
 # Build folders
 lib
 build/
+build-release/
+build-debug/
 buildDebug/
 buildDebug_py/
 build_py/
