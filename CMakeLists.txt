@@ -1,12 +1,11 @@
 cmake_minimum_required(VERSION 2.8.9)
 
-SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMake")
 
 project(pandora)
 
 find_package(GDAL REQUIRED)
 
-#find_library(HDF5 REQUIRED)
 #Bring the headers, such as Student.h into the project
 include_directories(include include/analysis)
 
@@ -37,9 +36,10 @@ include_directories(${GDAL_INCLUDE_DIR})
 
 target_link_libraries(pandora ${MPI_LIBRARIES} ${GDAL_LIBRARY})
 
-install(TARGETS pandora DESTINATION /usr/lib)
+install(TARGETS pandora DESTINATION /usr/local/lib64)
 
 add_subdirectory(examples/randomWalkers)
+add_subdirectory(examples/epidemy)
 
 
 
