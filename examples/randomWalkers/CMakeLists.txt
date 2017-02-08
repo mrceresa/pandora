@@ -25,10 +25,12 @@ add_custom_command(
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR/mpiCode})
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/mpiCode)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/mpiCode)
 
 file(GLOB SOURCES "*.cxx")
+file(COPY config.xml DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(randomWalk ${SOURCES} ${mpiAgentsSrcFullPath})
 target_link_libraries(randomWalk pandora ${Boost_LIBRARIES} ${TinyXML_LIBRARIES})
-install(TARGETS randomWalk DESTINATION /usr/lib)
+install(TARGETS randomWalk DESTINATION /usr/local/bin)
