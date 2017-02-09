@@ -34,6 +34,19 @@ endif()
 find_package(GDAL REQUIRED)
 include_directories(${GDAL_INCLUDE_DIR})
 
+##### HDF5 ###
+#set(HDF5_PREFER_PARALLEL TRUE)
+#find_package(HDF5 COMPONENTS C REQUIRED)
+#include_directories(${HDF5_INCLUDE_DIRS})
+#message(STATUS ${HDF5_INCLUDE_DIRS})
+
+#set(HDF5_INCLUDE_DIRS "/usr/local/HDF_Group/HDF5/1.8.17/include/")
+#set(HDF5_LIBRARIES "/usr/local/HDF_Group/HDF5/1.8.17/lib/libhdf5.a") 
+#include_directories(${HDF5_INCLUDE_DIRS})
+
+include_directories("/usr/include/openmpi-x86_64/")
+
+#target_link_libraries(pandora ${MPI_LIBRARIES} ${GDAL_LIBRARY} ${HDF5_LIBRARIES})
 target_link_libraries(pandora ${MPI_LIBRARIES} ${GDAL_LIBRARY})
 
 install(TARGETS pandora DESTINATION /usr/local/lib64)
