@@ -34,4 +34,4 @@ file(COPY resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(epidemy ${SOURCES} ${mpiAgentsSrcFullPath})
 target_link_libraries(epidemy pandora ${Boost_LIBRARIES} ${TinyXML_LIBRARIES})
-install(TARGETS epidemy DESTINATION /usr/local/bin)
+#install(TARGETS epidemy DESTINATION /usr/local/bin)
