@@ -33,4 +33,4 @@ file(COPY config.xml DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(randomWalk ${SOURCES} ${mpiAgentsSrcFullPath})
 target_link_libraries(randomWalk pandora ${Boost_LIBRARIES} ${TinyXML_LIBRARIES})
-install(TARGETS randomWalk DESTINATION /usr/local/bin)
+#install(TARGETS randomWalk DESTINATION ${INSTALL_LIB_DIR})
