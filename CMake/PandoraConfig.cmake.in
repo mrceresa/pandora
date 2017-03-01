@@ -1,0 +1,22 @@
+# - Config file for the Pandora package
+# It defines the following variables
+#  PANDORA_INCLUDE_DIRS - include directories for Pandora
+#  PANDORA_LIBRARIES    - libraries to link against
+#  PANDORA_EXECUTABLE   - the bar executable
+ 
+@PACKAGE_INIT@ 
+
+set( PANDORA_INCLUDE_DIRS "@PACKAGE_ALL_INCLUDE_DIRS@")
+
+# Compute paths
+get_filename_component(PANDORA_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+
+ 
+# Our library dependencies (contains definitions for IMPORTED targets)
+if(NOT TARGET pandora AND NOT PANDORA_BINARY_DIR)
+  include("${PANDORA_CMAKE_DIR}/PandoraTargets.cmake")
+endif()
+ 
+# These are IMPORTED targets created by PandoraTargets.cmake
+set(PANDORA_LIBRARIES pandora pyPandora)
+

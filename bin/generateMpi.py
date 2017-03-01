@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import sys, os
+import argparse
+import json
 
 
 def writeRegisterTypes( f, listAgents ):
@@ -433,4 +435,21 @@ def execute( target, source, env ):
     createFactoryMethods(listAgents, str(target[0]), namespaceAgents, listAttributesMaps )
     print 'done!'
     return None
+
+def main():
+    # Read config files and configure the framework
+	
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--target',nargs='*')
+    parser.add_argument('--source',nargs='*')
+    parser.add_argument('--env',type=json.loads)
+
+    args = parser.parse_args()
+    print args.__dict__
+
+    execute(args.target, args.source, args.env)
+
+if __name__ ==  "__main__":
+    res = main()
 

@@ -2,7 +2,7 @@
 #include <ShpLoader.hxx>
 #include <Exception.hxx>
 
-#include <ogrsf_frmts.h>
+
 
 namespace Engine
 {
@@ -21,8 +21,20 @@ ShpLoader::~ShpLoader()
 
 void ShpLoader::open( const std::string & file )
 {
-	OGRRegisterAll();
-	_dataSource  = OGRSFDriverRegistrar::Open(file.c_str(), false);
+	//OGRRegisterAll();
+  GDALAllRegister();
+
+  GDALDataset       *poDS;
+  poDS = (GDALDataset*) GDALOpenEx( file.c_str(), GDAL_OF_VECTOR, NULL, NULL, NULL );
+  if( poDS == NULL )
+  {
+      printf( "Open failed.\n" );
+      exit( 1 );
+  }
+
+
+
+	_dataSource  = poDS;
 	if(!_dataSource)
 	{
 		std::stringstream oss;

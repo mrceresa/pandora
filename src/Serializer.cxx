@@ -503,18 +503,26 @@ void Serializer::executeAgentSerialization( const std::string & type, int step)
 	for(StringMap::iterator itM=attributesS->begin(); itM!=attributesS->end(); itM++)
 	{
 		std::vector<std::string> * data = itM->second;
+		
+		const size_t n = data->size();
+		hsize_t simpleDimension = n;
+		
+		char* dataA[n];
+		for (size_t i = 0; i < n; i++) {
+			dataA[i] = data->at(i).c_str();
+		}
+				
 		hsize_t	block[1];
 		block[0] = data->size();
 		
-		hsize_t simpleDimension = data->size();
 		// TODO es repeteix per cada atribut
 		hsize_t newSize[1];
 		newSize[0] = currentIndex+data->size();
 		itI->second = currentIndex+data->size();
-
+				
 		std::ostringstream oss;
 		oss << type << "/step" << step << "/" << itM->first;
-
+		
 		hid_t datasetId = H5Dopen(_agentsFileId, oss.str().c_str(), H5P_DEFAULT);
 		H5Dset_extent( datasetId, newSize);
 		hid_t fileSpace = H5Dget_space(datasetId);
@@ -522,12 +530,13 @@ void Serializer::executeAgentSerialization( const std::string & type, int step)
 		hid_t idType = H5Tcopy(H5T_C_S1);
 		H5Tset_size (idType, H5T_VARIABLE);
   		hid_t memorySpace = H5Screate_simple(1, &simpleDimension, 0);
-		H5Dwrite(datasetId, idType, memorySpace, fileSpace, H5P_DEFAULT, &(data->at(0)));
+		H5Dwrite(datasetId, idType, memorySpace, fileSpace, H5P_DEFAULT, dataA);
 		data->clear();
-
+		
 		H5Sclose(memorySpace);
 		H5Sclose(fileSpace);
 		H5Dclose(datasetId);
+		
 	}
 }
 

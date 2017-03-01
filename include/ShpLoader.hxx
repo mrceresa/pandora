@@ -6,8 +6,7 @@
 
 #include <Point2D.hxx>
 
-class OGRDataSource;
-class OGRLayer;
+#include <ogrsf_frmts.h>
 
 namespace Engine
 {
@@ -15,7 +14,7 @@ namespace Engine
 class ShpLoader
 {
 	// shapefile source
-	OGRDataSource * _dataSource;
+	GDALDataset * _dataSource;
 	// layer to be loaded
 	OGRLayer * _activeLayer;
 
