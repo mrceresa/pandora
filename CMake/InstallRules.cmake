@@ -23,30 +23,6 @@ set(DEF_INSTALL_CMAKE_DIR lib64/cmake/pandora)
 
 set(INSTALL_CMAKE_DIR ${DEF_INSTALL_CMAKE_DIR} CACHE PATH "Installation directory for CMake files")
 
-# ... for the build tree
-set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/include")
-
-get_property(ALL_INCLUDE_DIRS DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
-configure_package_config_file(
-  "${CMAKE_SOURCE_DIR}/CMake/PandoraConfig.cmake.in"
-  "${CMAKE_BINARY_DIR}/PandoraConfig.cmake"  
-   INSTALL_DESTINATION "${INSTALL_CMAKE_DIR}"
-   PATH_VARS ALL_INCLUDE_DIRS )
-
-
-# ... for the install tree
-set(CONF_INCLUDE_DIRS "${PANDORA_CMAKE_DIR}/${INCLUDE_DIR}")
-configure_file(${CMAKE_SOURCE_DIR}/CMake/PandoraConfig.cmake.in
-  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/PandoraConfig.cmake" @ONLY)
-# ... for both
-configure_file(${CMAKE_SOURCE_DIR}/CMake/PandoraConfigVersion.cmake.in
-  "${PROJECT_BINARY_DIR}/PandoraConfigVersion.cmake" @ONLY)
- 
-# Install the FooBarConfig.cmake and FooBarConfigVersion.cmake
-install(FILES
-  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/PandoraConfig.cmake"
-  "${PROJECT_BINARY_DIR}/PandoraConfigVersion.cmake"
-  DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
 
 
 

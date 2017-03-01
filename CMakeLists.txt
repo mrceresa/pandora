@@ -13,16 +13,43 @@ set(PANDORA_VERSION
 
 include( CMakePackageConfigHelpers )
 
+# Load global install rules
+include(${CMAKE_COMMON_CMAKE_DIR}/InstallRules.cmake)
 # Load external libs
 include(${CMAKE_COMMON_CMAKE_DIR}/CommonLibs.cmake)
 
 add_subdirectory(src)
 add_subdirectory(examples/randomWalkers)
 add_subdirectory(examples/epidemy)
-add_subdirectory(examples/policy)
+#add_subdirectory(cassandra)
 
-# Load global install rules
-include(${CMAKE_COMMON_CMAKE_DIR}/InstallRules.cmake)
+
+
+# ... for the build tree
+set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/include")
+
+get_property(ALL_INCLUDE_DIRS DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+configure_package_config_file(
+  "${CMAKE_SOURCE_DIR}/CMake/PandoraConfig.cmake.in"
+  "${CMAKE_BINARY_DIR}/PandoraConfig.cmake"  
+   INSTALL_DESTINATION "${INSTALL_CMAKE_DIR}"
+   PATH_VARS ALL_INCLUDE_DIRS )
+
+
+# ... for the install tree
+set(CONF_INCLUDE_DIRS "${PANDORA_CMAKE_DIR}/${INCLUDE_DIR}")
+configure_file(${CMAKE_SOURCE_DIR}/CMake/PandoraConfig.cmake.in
+  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/PandoraConfig.cmake" @ONLY)
+# ... for both
+configure_file(${CMAKE_SOURCE_DIR}/CMake/PandoraConfigVersion.cmake.in
+  "${PROJECT_BINARY_DIR}/PandoraConfigVersion.cmake" @ONLY)
+ 
+# Install the PandoraConfig.cmake and PandoraConfigVersion.cmake
+install(FILES
+  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/PandoraConfig.cmake"
+  "${PROJECT_BINARY_DIR}/PandoraConfigVersion.cmake"
+  DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
+
 
 # Add all targets to the build-tree export set
 export(TARGETS pandora pyPandora randomWalk epidemy 
