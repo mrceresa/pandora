@@ -1,3 +1,6 @@
+This is a fork internally used at UPF from the great project by Xavier Rubio that you can find here:
+https://github.com/xrubio/pandora
+
 pandora
 =======
 a C++/Python Agent-Based Modelling framework for large-scale distributed simulations
