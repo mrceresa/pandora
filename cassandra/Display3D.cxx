@@ -38,7 +38,7 @@
 #include <ColorSelector.hxx>
 #include <ProjectConfiguration.hxx>
 #include <algorithm>
-#include <glut.h>
+#include <GL/glut.h>
 #include <QDebug>
 #include <QTime>
 #include <AgentRecord.hxx>
