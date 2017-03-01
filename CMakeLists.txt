@@ -21,8 +21,7 @@ include(${CMAKE_COMMON_CMAKE_DIR}/CommonLibs.cmake)
 add_subdirectory(src)
 add_subdirectory(examples/randomWalkers)
 add_subdirectory(examples/epidemy)
-#add_subdirectory(cassandra)
-
+add_subdirectory(cassandra)
 
 
 # ... for the build tree
