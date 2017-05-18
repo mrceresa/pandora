@@ -395,10 +395,20 @@ void SequentialSerializer::executeAgentSerialization( const std::string & type, 
 	for(StringMap::iterator itM=attributesS->begin(); itM!=attributesS->end(); itM++)
 	{
 		std::vector<std::string> * data = itM->second;
+
+	  const size_t n = data->size();
+	  hsize_t simpleDimension = n;
+	  //log_INFO(logName.str(), "Serializing: " << simpleDimension);
+	  char* dataA[n];
+	  for (size_t i = 0; i < n; i++) {
+		  dataA[i] = data->at(i).c_str();
+	  }
+
+
 		hsize_t	block[1];
 		block[0] = data->size();
 		
-		hsize_t simpleDimension = data->size();
+
 		// TODO es repeteix per cada atribut
 		hsize_t newSize[1];
 		newSize[0] = currentIndex+data->size();
@@ -413,8 +423,9 @@ void SequentialSerializer::executeAgentSerialization( const std::string & type, 
 		H5Sselect_hyperslab(fileSpace, H5S_SELECT_SET, offset, stride, count, block);
 		hid_t idType = H5Tcopy(H5T_C_S1);
 		H5Tset_size (idType, H5T_VARIABLE);
-  		hid_t memorySpace = H5Screate_simple(1, &simpleDimension, 0);
-		H5Dwrite(datasetId, idType, memorySpace, fileSpace, H5P_DEFAULT, &(data->at(0)));
+ 		hid_t memorySpace = H5Screate_simple(1, &simpleDimension, 0);
+		//H5Dwrite(datasetId, idType, memorySpace, fileSpace, H5P_DEFAULT, &(data->at(0)));
+    H5Dwrite(datasetId, idType, memorySpace, fileSpace, H5P_DEFAULT, dataA);
 		data->clear();
 
 		H5Sclose(memorySpace);

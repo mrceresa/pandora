@@ -5,6 +5,7 @@ file(GLOB analysisFILES "analysis/*.cxx")
 file(GLOB utilsFILES "../utils/*.cxx")
 add_library(pandora SHARED ${coreFILES} ${analysisFILES} ${utilsFILES})
 set_target_properties(pandora PROPERTIES COMPILE_FLAGS "-fpermissive")
+set_target_properties(pandora PROPERTIES COMPILE_FLAGS "-fopenmp")
 
 #target_link_libraries(pandora ${MPI_LIBRARIES} ${GDAL_LIBRARY} ${HDF5_LIBRARIES})
 target_link_libraries(pandora ${MPI_LIBRARIES} ${GDAL_LIBRARY} ${TinyXML_LIBRARIES})
