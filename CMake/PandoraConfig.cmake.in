@@ -2,7 +2,7 @@
 # It defines the following variables
 #  PANDORA_INCLUDE_DIRS - include directories for Pandora
 #  PANDORA_LIBRARIES    - libraries to link against
-#  PANDORA_EXECUTABLE   - the bar executable
+#  PANDORA_MPIGEN       - the mpi generator code
  
 @PACKAGE_INIT@ 
 
@@ -19,4 +19,6 @@ endif()
  
 # These are IMPORTED targets created by PandoraTargets.cmake
 set(PANDORA_LIBRARIES pandora pyPandora)
+
+set(PANDORA_MPIGEN @CMAKE_SOURCE_DIR@/bin/generateMpi.py)
 
