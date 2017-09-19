@@ -244,7 +244,7 @@ def getMpiTypeConversion( typeInCpp ):
         return 'MPI_INTEGER'
 
 def writeVectorAttributesPassing( f, agentName, vectorAttributesMap ):
-    print 'writing vector attributes map'
+    print '\twriting vector attributes map'
     f.write('\n')
     f.write('void '+agentName+'::sendVectorAttributes( int target )\n')
     f.write('{\n')
@@ -358,6 +358,10 @@ def getAttributesFromClass( className, attributesMap, vectorAttributesMap):
             if(indexSeparator!=-1):
                 parentNameWithoutNamespace = parentName[indexSeparator+2:]
             if parentNameWithoutNamespace!= 'Agent':
+                # TODO: Code is brittle: if it gives you an error like
+                # "{ in header: {.hxx" then remember to start your class like:
+                # class RandomAgent : public Engine::Agent
+                # and *not* with a trailing "{"
                 getAttributesFromClass( parentNameWithoutNamespace, attributesMap, vectorAttributesMap )
     f.close()
     return parentName
@@ -411,20 +415,24 @@ def checkHeader(agentName, headerName):
     return 
 
 def execute( target, source, env ):
-    print 'generating code for mpi communication...'
+    print 'generating code for mpi communication for %d targets ...'%(len(source))
     listAgents = []
     listAttributesMaps = []
     namespaceAgents = env['namespaces']
+    print "Namespaces:",namespaceAgents
+    if (len(namespaceAgents) == 1) and (len(source) > 1):
+      namespaceAgents = [namespaceAgents[0] for _ in source]
     for i in range(1,len(source)):      
         sourceName = str(source[i])
         headerName = sourceName.replace(".cxx", ".hxx")
         listAgents += [sourceName.replace(".cxx", "")]
         checkHeader(sourceName.replace(".cxx", ""), headerName)
-        print '\tprocessing agent: ' + listAgents[i-1]
+        print '\t* processing agent: ' + listAgents[i-1]
         # get the list of attributes to send/receive in MPI
         attributesMap = {}
         vectorAttributesMap = {}
         parentName = getAttributesFromClass(listAgents[i-1], attributesMap, vectorAttributesMap )
+        print "\t\tParent name:",parentName
         # create header declaring a package with the list of attributes
         createMpiHeader(listAgents[i-1], sourceName, headerName, attributesMap )
         # create a source code defining package-class copy
