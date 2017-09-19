@@ -23,6 +23,7 @@
 #include <DynamicRaster.hxx>
 #include <RasterLoader.hxx>
 #include <Exception.hxx>
+#include <Logger.hxx>
 
 #include <sstream>
 #include <limits>
@@ -60,14 +61,24 @@ void DynamicRaster::resize( const Size<int> & size )
 }
 
 void DynamicRaster::updateRasterIncrement()
+/**
+ *  I don't understand why someone would want to increment each turn!
+ *  made it optional for now
+ */
 {
-	for(size_t i=0; i<_values.size(); i++)
-	{
-		for(size_t j=0; j<_values[i].size(); j++)
+
+	if (not disableAutoIncrement) {
+		std::stringstream logName;
+		logName << "DynamicRaster::updateRasterIncrement()";
+		log_INFO(logName.str(),  " we will comply and autoincrement!");
+		for(size_t i=0; i<_values.size(); i++)
 		{
-			if(_values.at(i).at(j) < _maxValues[i][j])
+			for(size_t j=0; j<_values[i].size(); j++)
 			{
-				_values.at(i).at(j)++;
+				if(_values.at(i).at(j) < _maxValues[i][j])
+				{
+					_values.at(i).at(j)++;
+				}
 			}
 		}
 	}

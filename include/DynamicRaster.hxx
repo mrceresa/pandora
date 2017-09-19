@@ -36,10 +36,15 @@ class DynamicRaster : public StaticRaster
 	std::vector< std::vector<int> >	_maxValues;
 	int	_currentMaxValue;
 	int	_currentMinValue;
+	bool _disableAutoIncrement = false;
 public:
 	DynamicRaster();
 	virtual ~DynamicRaster();
 	
+	// Disable auto-incremenet
+	void setDisableAutoIncrement(bool value) {
+		_disableAutoIncrement = value;
+	}
 	//! Equality operators
 	bool operator==(const DynamicRaster& other) const;
 	bool operator!=(const DynamicRaster& other) const;
