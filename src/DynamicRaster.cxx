@@ -67,7 +67,7 @@ void DynamicRaster::updateRasterIncrement()
  */
 {
 
-	if (not disableAutoIncrement) {
+	if (not this->_disableAutoIncrement) {
 		std::stringstream logName;
 		logName << "DynamicRaster::updateRasterIncrement()";
 		log_INFO(logName.str(),  " we will comply and autoincrement!");
