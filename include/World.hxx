@@ -28,6 +28,7 @@
 #include <list>
 #include <typedefs.hxx>
 #include <DynamicRaster.hxx>
+#include <FloatDynamicRaster.hxx>
 #include <StaticRaster.hxx>
 #include <Rectangle.hxx>
 #include <Point2D.hxx>
@@ -115,6 +116,12 @@ public:
 	DynamicRaster & getDynamicRaster( const std::string & key );
 	const DynamicRaster & getDynamicRaster( const std::string & key ) const;
 
+	//! returns raster identified by parameter 'key'.
+	FloatDynamicRaster & getFloatDynamicRaster( const size_t & index );
+	const FloatDynamicRaster & getFloatDynamicRaster( const size_t & index ) const;
+	FloatDynamicRaster & getFloatDynamicRaster( const std::string & key );
+	const FloatDynamicRaster & getFloatDynamicRaster( const std::string & key ) const;
+
 	//! returns static raster identified by parameter 'key'.
 	StaticRaster & getStaticRaster( const size_t & index );
 	StaticRaster & getStaticRaster( const std::string & key );
@@ -123,17 +130,22 @@ public:
 	void registerStaticRaster( const std::string & key, const bool & serialize, int index = -1);
 	//! create a new raster map with the stablished size and given key
 	void registerDynamicRaster( const std::string & key, const bool & serialize, int index = -1);
+	void registerFloatDynamicRaster( const std::string & key, const bool & serialize, int index = -1);
 	//! checks if position parameter 'newPosition' is free to occupy by an agent, 'newPosition' is inside of the world and the maximum of agent cell-occupancy is not exceeded.
 	bool checkPosition( const Point2D<int> & newPosition ) const;
 
 	//! sets the value of raster "key" to value "value" in global position "position"
 	void setValue( const std::string & key, const Point2D<int> & position, int value );
+	void setFloatValue( const std::string & key, const Point2D<int> & position, float value );
 	//! sets the value of raster "index" to value "value" in global position "position"
 	void setValue( const int & index, const Point2D<int> & position, int value );
+	void setFloatValue( const int & index, const Point2D<int> & position, float value );
 	//! returns the value of raster "key" in global position "position"
 	int getValue( const std::string & key, const Point2D<int> & position ) const;
+	float getFloatValue( const std::string & key, const Point2D<int> & position ) const;
 	//! returns the value of raster "index" in global position "position"
 	int getValue( const int & index, const Point2D<int> & position ) const;
+	float getFloatValue( const int & index, const Point2D<int> & position ) const;
 
 	//! sets the maximum allowed value of raster "key" to value "value" in global position "position"
 	void setMaxValue( const std::string & key, const Point2D<int> & position, int value );

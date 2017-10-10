@@ -203,6 +203,36 @@ void World::registerDynamicRaster( const std::string & key, const bool & seriali
 	_serializeRasters.at(index) = serialize;
 }
 
+void World::registerFloatDynamicRaster( const std::string & key, const bool & serialize, int index )
+{
+	// if no index is provided, add one at the end
+	if(index==-1)
+	{
+		index = _rasters.size();
+	}
+
+	if(_rasters.size()<=index)
+	{
+		size_t oldSize = _rasters.size();
+		_rasters.resize(index+1);
+		for(size_t i=oldSize; i<_rasters.size(); i++)
+		{
+			_rasters.at(i) = 0;
+		}
+		_dynamicRasters.resize(index+1);
+		_serializeRasters.resize(index+1);
+	}
+	_rasterNames.insert(make_pair(key, index));
+	_dynamicRasters.at(index) = true;
+	if(_rasters.at(index))
+	{
+		delete _rasters.at(index);
+	}
+	_rasters.at(index) = new FloatDynamicRaster();
+	_rasters.at(index)->resize(_scheduler->getBoundaries()._size);
+	_serializeRasters.at(index) = serialize;
+}
+
 void World::registerStaticRaster( const std::string & key, const bool & serialize, int index )
 {
 	// if no index is provided, add one at the end
@@ -320,6 +350,39 @@ DynamicRaster & World::getDynamicRaster( const std::string & key ) {
 	return const_cast<DynamicRaster &>( static_cast<const World&>( *this ).getDynamicRaster(key) );
 }
 
+const FloatDynamicRaster & World::getFloatDynamicRaster( const size_t & index) const
+{
+	if(index>=_rasters.size())
+	{
+		std::stringstream oss;
+		oss << "World::getFloatDynamicRaster - index: " << index << " out of bound with size: " << _rasters.size();
+		throw Exception(oss.str());
+	}
+	return (FloatDynamicRaster &)*(_rasters.at(index));
+}
+
+FloatDynamicRaster & World::getFloatDynamicRaster( const size_t & index) {
+	// @see http://stackoverflow.com/a/123995
+	return const_cast<FloatDynamicRaster &>( static_cast<const World&>( *this ).getFloatDynamicRaster(index) );
+}
+
+const FloatDynamicRaster & World::getFloatDynamicRaster( const std::string & key ) const
+{
+	RasterNameMap::const_iterator it = _rasterNames.find(key);
+	if(it==_rasterNames.end())
+	{
+		std::stringstream oss;
+		oss << "World::getFloatDynamicRaster - raster: " << key << " not registered";
+		throw Exception(oss.str());
+	}
+	return getFloatDynamicRaster(it->second);
+}
+
+FloatDynamicRaster & World::getFloatDynamicRaster( const std::string & key ) {
+	// @see http://stackoverflow.com/a/123995
+	return const_cast<FloatDynamicRaster &>( static_cast<const World&>( *this ).getFloatDynamicRaster(key) );
+}
+
 void World::setValue( const std::string & key, const Point2D<int> & position, int value )
 {
 	RasterNameMap::const_iterator it = _rasterNames.find(key);
@@ -332,6 +395,18 @@ void World::setValue( const int & index, const Point2D<int> & position, int valu
 	_scheduler->setValue(*raster, position, value);
 }
 
+void World::setFloatValue( const std::string & key, const Point2D<int> & position, float value )
+{
+	RasterNameMap::const_iterator it = _rasterNames.find(key);
+	setValue(it->second, position, value);
+}
+
+void World::setFloatValue( const int & index, const Point2D<int> & position, float value )
+{
+	FloatDynamicRaster * raster = (FloatDynamicRaster*)(_rasters.at(index));
+	raster->setValue(position, value);
+}
+
 int World::getValue( const std::string & key, const Point2D<int> & position ) const
 {
 	RasterNameMap::const_iterator it = _rasterNames.find(key);
@@ -342,6 +417,18 @@ int World::getValue( const int & index, const Point2D<int> & position ) const
 {
 	DynamicRaster * raster = (DynamicRaster*)(_rasters.at(index));
 	return _scheduler->getValue(*raster, position);
+}
+
+float World::getFloatValue( const std::string & key, const Point2D<int> & position ) const
+{
+	RasterNameMap::const_iterator it = _rasterNames.find(key);
+	return getValue(it->second, position);
+}
+
+float World::getFloatValue( const int & index, const Point2D<int> & position ) const
+{
+	FloatDynamicRaster * raster = (FloatDynamicRaster*)(_rasters.at(index));
+	return raster->getValue(position);
 }
 
 void World::setMaxValue( const std::string & key, const Point2D<int> & position, int value )

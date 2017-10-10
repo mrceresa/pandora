@@ -21,6 +21,8 @@ include(${CMAKE_COMMON_CMAKE_DIR}/CommonLibs.cmake)
 add_subdirectory(src)
 add_subdirectory(examples/randomWalkers)
 add_subdirectory(examples/epidemy)
+add_subdirectory(examples/emphysema)
+add_subdirectory(examples/anasazi)
 add_subdirectory(cassandra)
 
 
@@ -48,8 +50,7 @@ install(FILES
   "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/PandoraConfig.cmake"
   "${PROJECT_BINARY_DIR}/PandoraConfigVersion.cmake"
   DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
-
-
+  
 # Add all targets to the build-tree export set
 export(TARGETS pandora pyPandora randomWalk epidemy 
   FILE "${PROJECT_BINARY_DIR}/PandoraTargets.cmake")
