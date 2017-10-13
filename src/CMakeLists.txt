@@ -18,5 +18,5 @@ set_target_properties(pyPandora PROPERTIES COMPILE_FLAGS "-fpermissive")
 
 target_link_libraries(pyPandora ${PYTHON_LIBRARIES} ${Boost_LIBRARIES} ${MPI_LIBRARIES}  ${TinyXML_LIBRARIES} ${GDAL_LIBRARY} /usr/lib64/openmpi/lib/libhdf5.so)
 
-#install(FILES pyPandora/pyPandora.py DESTINATION  ${INSTALL_LIB_DIR})
+install(FILES ${CMAKE_SOURCE_DIR}/bin/pyPandora.py DESTINATION  ${INSTALL_LIB_DIR})
 install(TARGETS pandora pyPandora DESTINATION ${INSTALL_LIB_DIR} )
